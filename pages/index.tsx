@@ -2,8 +2,101 @@ import type { NextPage } from 'next'
 import Head from 'next/head'
 import Image from 'next/image'
 import styles from '../styles/Home.module.css'
-import Header from '../Components/Header/Header'
+import axios from "axios";
+import { useEffect, useState } from 'react'
+import { Table, Tag, Space, Button } from 'antd';
+
+
+import Swal from 'sweetalert2';
+
+
+
+const deleteConfirrm =()=>{
+    return Swal.fire({
+       icon: 'error',
+       title: 'Are you want DELETE It?',
+       showCancelButton: true,
+       confirmButtonText: 'Yes',
+     })
+
+}
+
 const Home: NextPage = () => {
+  const [user,setUser]=useState<any>([]);
+
+
+  useEffect(()=>{
+    fetch('/api/userapi')
+    .then(res=>res.json())
+    .then(data=>{
+      console.log("data",data);
+      
+     setUser(data);
+    })
+  },[])
+
+
+  const handledelete= async (id:any)=>{
+    console.log("clicked",id);
+    
+      // deleteConfirrm()
+      //    await axios.delete(`/api/delete/?id=${id}`)
+      //     .then(res => {
+            
+      //     })
+          deleteConfirrm()
+          .then((result) => {
+              if (result.isConfirmed) {
+               axios.delete(`/api/delete/?id=${id}`)
+                  .then(data=>{
+                   
+                     if(data){
+                         const restItem = user.filter((item:any)=>item._id !== id);
+                         setUser(restItem)
+                     }
+                  })
+                  Swal.fire({
+                      icon: 'error',
+                      title: 'DELETED',
+                      showConfirmButton: false,
+                      timer: 1000
+      
+                  }) 
+              } 
+            })
+  }
+   
+
+  const columns = [
+    {
+      title: 'Name',
+      dataIndex: 'name',
+      key: 'name',
+    },
+    {
+      title: 'Email',
+      dataIndex: 'email',
+      key: 'address',
+    },
+    {
+      title: 'Age',
+      dataIndex: 'age',
+      key: 'age',
+    },
+    
+    {
+      title: 'Action',
+      key: 'action',
+      render: (text:any, record:any) => (
+        <Space size="middle">
+          <Button type="primary" >Update</Button>
+          <Button onClick={()=>handledelete(text._id)} type="primary" danger>Delete</Button>
+        </Space>
+      ),
+    },
+  ];
+  
+  
   return (
     <div className={styles.container}>
       <Head>
@@ -13,8 +106,9 @@ const Home: NextPage = () => {
       </Head>
 
       <main className={styles.main}>
-       
-        <Header></Header>
+        <h1>All User Data</h1>
+        <Table bordered
+      dataSource={user} columns={columns} />
       </main>
 
       <footer className={styles.footer}>
