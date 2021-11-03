@@ -1,7 +1,7 @@
 import {connectToDatabase} from "../../lib/mongodb"
-import {ObjectId} from 'mongodb'
+const ObjectId = require('mongodb').ObjectID
 
-export default async function handler(req,res){
+export default async function handler(req:any,res:any){
     const id = req.query
     const {db} = await connectToDatabase();
     const collection = await db.collection("users")

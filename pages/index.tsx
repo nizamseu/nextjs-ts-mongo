@@ -5,7 +5,7 @@ import styles from '../styles/Home.module.css'
 import axios from "axios";
 import { useEffect, useState } from 'react'
 import { Table, Tag, Space, Button } from 'antd';
-
+import Link from 'next/link'
 
 import Swal from 'sweetalert2';
 
@@ -37,13 +37,7 @@ const Home: NextPage = () => {
 
 
   const handledelete= async (id:any)=>{
-    console.log("clicked",id);
-    
-      // deleteConfirrm()
-      //    await axios.delete(`/api/delete/?id=${id}`)
-      //     .then(res => {
-            
-      //     })
+
           deleteConfirrm()
           .then((result) => {
               if (result.isConfirmed) {
@@ -67,6 +61,7 @@ const Home: NextPage = () => {
   }
    
 
+
   const columns = [
     {
       title: 'Name',
@@ -89,7 +84,7 @@ const Home: NextPage = () => {
       key: 'action',
       render: (text:any, record:any) => (
         <Space size="middle">
-          <Button type="primary" >Update</Button>
+          <Button type="primary" ><Link href={`/update/${text._id} `} >Update</Link></Button>
           <Button onClick={()=>handledelete(text._id)} type="primary" danger>Delete</Button>
         </Space>
       ),
