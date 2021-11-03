@@ -9,13 +9,13 @@ const Navbar = () => {
         <Layout>  
           <Menu mode="horizontal" >
             <Menu.Item  icon={<DingtalkOutlined />}><Link href='/'><a></a></Link>
-             BD Users
+             USER CRUD 
             </Menu.Item>
             <Menu.Item ><Link href='/'>Home</Link></Menu.Item>
-            <Menu.Item ><Link href='/users'>Users</Link></Menu.Item>
+            {/* <Menu.Item ><Link href='/users'>Users</Link></Menu.Item> */}
             <Menu.Item ><Link href='/newUser'>Add New User</Link></Menu.Item>
-            <Menu.Item ><Link href='/about'>About</Link></Menu.Item>
-            <Menu.Item ><Link href='/signin'>Login</Link></Menu.Item>
+            {/* <Menu.Item ><Link href='/about'>About</Link></Menu.Item>
+            <Menu.Item ><Link href='/signin'>Login</Link></Menu.Item> */}
           </Menu>
       
         </Layout>

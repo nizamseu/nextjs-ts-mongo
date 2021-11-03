@@ -14,6 +14,37 @@ a {
 * {
   box-sizing: border-box;
 }
-.newUser{
+
+.update input{
+  margin: 10px 0;
+  padding: 10px;
   width: 350px;
+  border-radius: 10px;
+  border: 1px solid lightsteelblue;
+  font-size: large;
+}
+.update label{
+font-size: larger;
+}
+.updateText{
+  text-align: center;
+  font-size: 30px;
+  font-weight: 900;
+  font-family: monospace;
+  color: crimson;
+}
+.btn{
+  background-color: dodgerblue;
+  color: antiquewhite;
+}
+.addUser{
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+
+}
+.form{
+  justify-content: center;
+  align-items: center;
 }

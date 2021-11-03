@@ -1,9 +1,7 @@
 import { Form, Input, InputNumber, Button, Space } from 'antd';
 import axios from "axios";
 import Swal from 'sweetalert2'
-import { FormInstance } from 'antd/es/form';
-import { createRef } from 'react';
-import { useForm } from 'antd/es/form/Form';
+import router from 'next/router';
 
 const AlertMessage =()=>{
   Swal.fire({
@@ -46,7 +44,7 @@ const newUser = () => {
                     console.log(res);
                     if(res?.data?.insertedId){
                       AlertMessage()
-                      
+                      router.push('/')
                   }
                   })
           
@@ -57,10 +55,10 @@ const newUser = () => {
     
 
     return (
-        <div>
+        <div className='addUser'>
             
-            <h1 style={{textAlign:'center'}}>Add a new User</h1>
-            <Space  direction="horizontal" align="center" style={{width: '100%',justifyContent: 'center'}}> 
+            <h1 className='updateText'>Add a new User</h1>
+            <Space  direction="horizontal" align="center" className='form'> 
                 <Form  {...layout} name="nest-messages" onFinish={onFinish} validateMessages={validateMessages}>
         <Form.Item
             name={['user', 'name']}
