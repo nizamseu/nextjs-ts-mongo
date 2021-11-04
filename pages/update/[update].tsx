@@ -1,86 +1,95 @@
-import type { NextPage } from 'next'
-import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
-import axios from 'axios';
-import {Space } from 'antd';
-import Swal from 'sweetalert2'
+import { Space } from "antd";
+import axios from "axios";
+import type { NextPage } from "next";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import Swal from "sweetalert2";
 
+const updateAlert = () => {
+  Swal.fire({
+    icon: "success",
+    title: "Updated",
+    text: "Successfully Updated",
+    showConfirmButton: false,
+    timer: 1500,
+  });
+};
 
-const updateAlert =()=>{
-    Swal.fire({
-        icon: 'success',
-        title: 'Updated',
-        text: 'Successfully Updated',
-        showConfirmButton: false,
-        timer: 1500
-
-    }) 
-}
-
-  
 const Update: NextPage = () => {
-    const [update,setUpdate] =useState<any>({});
-    const router =useRouter();
-    const id =router.query.update;
-    
-   
-    useEffect(() => {
-       
-        axios.get(`/api/find/?id=${id}`)
-            .then(res => {
-              setUpdate(res.data);
-                
-            });
-    
-    }, [id]);
+  const [update, setUpdate] = useState<any>({});
+  const router = useRouter();
+  const id = router.query.update;
 
-    if(update.length<1){
-        return<h1>Loading...</h1>
-    }
-  
+  useEffect(() => {
+    axios.get(`/api/find/?id=${id}`).then((res) => {
+      setUpdate(res.data);
+    });
+  }, [id]);
 
-    const handleChange =(e:any)=>{
-        const updateData= {...update,[e.target.name]:e.target.value};
-        setUpdate(updateData)
-}
+  if (update.length < 1) {
+    return <h1>Loading...</h1>;
+  }
 
-const handleUpdate =(e:any)=>{
-    
-    axios.put(`/api/update/?id=${id}`,update)
-    .then(res=>{
-        if(res.data.modifiedCount>0){
-            updateAlert();
-            router.push('/')
-        }
-        
-        
-    })
-    
-    e.preventDefault()
-   
-}  
+  const handleChange = (e: any) => {
+    const updateData = { ...update, [e.target.name]: e.target.value };
+    setUpdate(updateData);
+  };
 
+  const handleUpdate = (e: any) => {
+    axios.put(`/api/update/?id=${id}`, update).then((res) => {
+      if (res.data.modifiedCount > 0) {
+        updateAlert();
+        router.push("/");
+      }
+    });
 
+    e.preventDefault();
+  };
 
-
-    return (
-        <div>
-            
-            <h1 className='updateText'>Update Your User</h1>
-            <Space  direction="horizontal" align="center" style={{width: '100%',justifyContent: 'center'}}> 
-               
-            <form onSubmit={handleUpdate} className='update'>
-                <label>Name: </label><br />
-                <input onChange={handleChange} type="text" name="name" id="" value={update.name} /> <br />
-                <label>Age: </label><br />
-                <input onChange={handleChange} type="text" name="age" id=""  value={update.age} /><br />
-                <label>Email: </label><br />
-                <input onChange={handleChange} type="text" name="email" id=""  value={update.email} /><br />
-                <input className='btn' type="submit" value="Update" />
-            </form>
-            </Space>
-        </div>
-    );
+  return (
+    <div>
+      <h1 className="updateText">Update Your User</h1>
+      <Space
+        direction="horizontal"
+        align="center"
+        style={{ width: "100%", justifyContent: "center" }}
+      >
+        <form onSubmit={handleUpdate} className="update">
+          <label>Name: </label>
+          <br />
+          <input
+            onChange={handleChange}
+            type="text"
+            name="name"
+            id=""
+            value={update.name}
+          />{" "}
+          <br />
+          <label>Age: </label>
+          <br />
+          <input
+            onChange={handleChange}
+            type="text"
+            name="age"
+            id=""
+            value={update.age}
+          />
+          <br />
+          <label>Email: </label>
+          <br />
+          <input
+            onChange={handleChange}
+            type="text"
+            name="email"
+            id=""
+            value={update.email}
+          />
+          <br />
+          <input className="btn" type="submit" value="Update" />
+        </form>
+      </Space>
+    </div>
+  );
 };
 
 export default Update;

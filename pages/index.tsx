@@ -1,97 +1,87 @@
-import type { NextPage } from 'next'
-import Head from 'next/head'
-import Image from 'next/image'
-import styles from '../styles/Home.module.css'
+import { Button, Space, Table } from "antd";
 import axios from "axios";
-import { useEffect, useState } from 'react'
-import { Table, Tag, Space, Button } from 'antd';
-import Link from 'next/link'
+import type { NextPage } from "next";
+import Head from "next/head";
+import Image from "next/image";
+import Link from "next/link";
+import { useEffect, useState } from "react";
+import Swal from "sweetalert2";
+import styles from "../styles/Home.module.css";
 
-import Swal from 'sweetalert2';
-
-
-
-const deleteConfirrm =()=>{
-    return Swal.fire({
-       icon: 'error',
-       title: 'Are you want DELETE It?',
-       showCancelButton: true,
-       confirmButtonText: 'Yes',
-     })
-
-}
+const deleteConfirrm = () => {
+  return Swal.fire({
+    icon: "error",
+    title: "Are you want DELETE It?",
+    showCancelButton: true,
+    confirmButtonText: "Yes",
+  });
+};
 
 const Home: NextPage = () => {
-  const [user,setUser]=useState<any>([]);
+  const [user, setUser] = useState<any>([]);
 
+  useEffect(() => {
+    fetch("/api/userapi")
+      .then((res) => res.json())
+      .then((data) => {
+        console.log("data", data);
 
-  useEffect(()=>{
-    fetch('/api/userapi')
-    .then(res=>res.json())
-    .then(data=>{
-      console.log("data",data);
-      
-     setUser(data);
-    })
-  },[])
+        setUser(data);
+      });
+  }, []);
 
-
-  const handledelete= async (id:any)=>{
-
-          deleteConfirrm()
-          .then((result) => {
-              if (result.isConfirmed) {
-               axios.delete(`/api/delete/?id=${id}`)
-                  .then(data=>{
-                   
-                     if(data){
-                         const restItem = user.filter((item:any)=>item._id !== id);
-                         setUser(restItem)
-                     }
-                  })
-                  Swal.fire({
-                      icon: 'error',
-                      title: 'DELETED',
-                      showConfirmButton: false,
-                      timer: 1000
-      
-                  }) 
-              } 
-            })
-  }
-   
-
+  const handledelete = async (id: any) => {
+    deleteConfirrm().then((result) => {
+      if (result.isConfirmed) {
+        axios.delete(`/api/delete/?id=${id}`).then((data) => {
+          if (data) {
+            const restItem = user.filter((item: any) => item._id !== id);
+            setUser(restItem);
+          }
+        });
+        Swal.fire({
+          icon: "error",
+          title: "DELETED",
+          showConfirmButton: false,
+          timer: 1000,
+        });
+      }
+    });
+  };
 
   const columns = [
     {
-      title: 'Name',
-      dataIndex: 'name',
-      key: 'name',
+      title: "Name",
+      dataIndex: "name",
+      key: "name",
     },
     {
-      title: 'Email',
-      dataIndex: 'email',
-      key: 'address',
+      title: "Email",
+      dataIndex: "email",
+      key: "address",
     },
     {
-      title: 'Age',
-      dataIndex: 'age',
-      key: 'age',
+      title: "Age",
+      dataIndex: "age",
+      key: "age",
     },
-    
+
     {
-      title: 'Action',
-      key: 'action',
-      render: (text:any, record:any) => (
+      title: "Action",
+      key: "action",
+      render: (text: any, record: any) => (
         <Space size="middle">
-          <Button type="primary" ><Link href={`/update/${text._id} `} >Update</Link></Button>
-          <Button onClick={()=>handledelete(text._id)} type="primary" danger>Delete</Button>
+          <Button type="primary">
+            <Link href={`/update/${text._id} `}>Update</Link>
+          </Button>
+          <Button onClick={() => handledelete(text._id)} type="primary" danger>
+            Delete
+          </Button>
         </Space>
       ),
     },
   ];
-  
-  
+
   return (
     <div className={styles.container}>
       <Head>
@@ -102,12 +92,11 @@ const Home: NextPage = () => {
 
       <main className={styles.main}>
         <h1>All User Data</h1>
-        {
-          user?<Table bordered
-          dataSource={user} columns={columns} />
-          :<h1>Loading Data From Server</h1>
-        }
-        
+        {user ? (
+          <Table bordered dataSource={user} columns={columns} />
+        ) : (
+          <h1>Loading Data From Server</h1>
+        )}
       </main>
 
       <footer className={styles.footer}>
@@ -116,14 +105,14 @@ const Home: NextPage = () => {
           target="_blank"
           rel="noopener noreferrer"
         >
-          Powered by{' '}
+          Powered by{" "}
           <span className={styles.logo}>
             <Image src="/vercel.svg" alt="Vercel Logo" width={72} height={16} />
           </span>
         </a>
       </footer>
     </div>
-  )
-}
+  );
+};
 
-export default Home
+export default Home;
